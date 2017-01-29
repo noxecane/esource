@@ -1,7 +1,8 @@
 (ns esource.help
   (:require [esource.core :refer [dispatch! state! on-event!]]
-            [tools.fns :as fns]
-            [tools.macros :refer [dochan]]))
+            [monger.core :as monger]
+            [monger.query :as query]
+            [contrib.core :as contrib]))
 
 
 (def by-name #(:name %2))
@@ -10,7 +11,7 @@
 (defn event [type stream name data]
   {:name   name
    :data   data
-   :date   (fns/now!)
+   :date   (contrib/now!)
    :stream stream
    :type   type})
 
@@ -19,11 +20,11 @@
   "For a given stream or stream and event(names) create a predicate to filter
   only maps containing such values in :type and :name keywords"
   ([stream]
-   (fns/key-is? :type stream))
+   (contrib/key-is? :type stream))
 
   ([stream event]
-   (let [stream-is? (fns/key-is? :type stream)
-         event-is?  (fns/key-is? :name event)]
+   (let [stream-is? (contrib/key-is? :type stream)
+         event-is?  (contrib/key-is? :name event)]
      #(and (stream-is? %)
            (event-is? %)))))
 
@@ -47,3 +48,19 @@
   (let [ech (on-event! stream event)]
     (dochan [e ech] (f e))
     ech))
+
+
+(defn max-document
+  ([db coll docquery field]
+   (first (query/with-collection db coll
+            (query/find docquery)
+            (query/sort (array-map field -1))
+            (query/limit 1))))
+
+  ([db coll docquery fields field]
+   (first (query/with-collection db coll
+            (query/find docquery)
+            (query/fields fields)
+            (query/sort (array-map field -1))
+            (query/limit 1)))))
+

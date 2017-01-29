@@ -1,13 +1,12 @@
 (ns esource.mongo
   (:require [esource.core :refer [IStore] :as core]
+            [esource.help :refer [max-document]]
             [monger.collection :as collection]
             [monger.core :as monger]
             [monger.query :as query]
             [monger.result :as result]
             [monger.operators :as operators]
-            [tools.fns :as fns]
-            [tools.monger :as m-tools])
-  (:import com.mongodb.DuplicateKeyException))
+            [esourec.monger :as m-tools]))
 
 
 (defn- read-store [db name stream start end]
@@ -22,7 +21,7 @@
   IStore
 
   (latest! [_ stream]
-    (m-tools/max-document db name {:stream stream} :version))
+    (max-document db name {:stream stream} :version))
 
   (latest-version! [store stream]
    (let [entry (core/latest! store stream)]

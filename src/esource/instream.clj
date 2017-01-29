@@ -1,8 +1,7 @@
 (ns esource.instream
   (:require [clojure.core.async :as a]
             [esource.core :as esource :refer [IStream]]
-            [esource.help :refer [assert-event from-fn]]
-            [tools.fns :as fns]))
+            [esource.help :refer [assert-event from-fn]]))
 
 
 (defrecord InprocStream [store bus type reducer cache init]
