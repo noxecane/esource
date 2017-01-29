@@ -5,9 +5,6 @@
             [contrib.core :as contrib :refer [dochan]]))
 
 
-(def by-name #(:name %2))
-
-
 (defn event [type stream name data]
   {:name   name
    :data   data
@@ -41,13 +38,14 @@
              [:name :type :stream :data]))))
 
 
-(defn event-consumer
-  "For a given event name event on a stream, create a loop that calls f on new events of the
-  same name"
-  [stream event f]
-  (let [ech (on-event! stream event)]
-    (dochan [e ech] (f e))
-    ech))
+(defmacro doevent
+  "For a given event name on a stream, create a subscription and a consumer over
+  each event e."
+  [stream event & body]
+  (let [event-var 'e]
+    `(let [ech# (on-event! ~stream ~event)]
+       (dochan [~event-var ech#]
+         ~@body))))
 
 
 (defn max-document
@@ -64,3 +62,6 @@
             (query/sort (array-map field -1))
             (query/limit 1)))))
 
+
+(defmacro defreducer [name]
+  `(defmulti ~name #(:name %2)))
