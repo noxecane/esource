@@ -5,8 +5,7 @@
             [monger.core :as monger]
             [monger.query :as query]
             [monger.result :as result]
-            [monger.operators :as operators]
-            [esourec.monger :as m-tools]))
+            [monger.operators :as operators]))
 
 
 (defn- read-store [db name stream start end]

@@ -2,7 +2,7 @@
   (:require [esource.core :refer [dispatch! state! on-event!]]
             [monger.core :as monger]
             [monger.query :as query]
-            [contrib.core :as contrib]))
+            [contrib.core :as contrib :refer [dochan]]))
 
 
 (def by-name #(:name %2))

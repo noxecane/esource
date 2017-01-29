@@ -1,7 +1,6 @@
 (ns esource.inproc
   (:require [clojure.core.async :as a]
-            [esource.core :refer [IBus] :as esource]
-            [tools.fns :as fns]))
+            [esource.core :refer [IBus] :as esource]))
 
 
 (defrecord InProcessBus [in sock]
