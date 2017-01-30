@@ -34,6 +34,13 @@
            (event-is? %)))))
 
 
+(defn event-fn
+  "For a given event type create a partial function for creating events."
+  [type]
+  (fn [state name data]
+    (event type (:id state) name data)))
+
+
 (defn assert-event
   "For a given event object assert it has the required for processing.
   :name, :type, :stream, :data"
