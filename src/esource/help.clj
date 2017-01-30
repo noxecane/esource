@@ -1,5 +1,5 @@
 (ns esource.help
-  (:require [esource.core :refer [dispatch! state! on-event!]]
+  (:require [esource.core :refer [on-event!]]
             [monger.core :as monger]
             [monger.query :as query]
             [contrib.core :as contrib :refer [dochan]]))
@@ -11,6 +11,14 @@
    :date   (contrib/now!)
    :stream stream
    :type   type})
+
+
+(defn data
+  "Given an event and a set of keys, get the value of the path defined by those
+  keys in the event data."
+  [ev & ks]
+  (let [k (conj ks :data)]
+    (get-in ev (vec k))))
 
 
 (defn from-fn
